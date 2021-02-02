@@ -48,6 +48,7 @@ inline void hashAndMapToG(G2& z, const void *m, mclSize size) { hashAndMapToG2(z
 static int g_curveType;
 static bool g_irtfHashAndMap;
 #ifdef BLS_ETH
+#error defined
 typedef G2 G;
 typedef G1 Gother;
 static G1 g_P;
@@ -191,6 +192,18 @@ void blsSign(blsSignature *sig, const blsSecretKey *sec, const void *m, mclSize 
 	Fr s = *cast(&sec->v);
 	GmulCT(*cast(&sig->v), *cast(&sig->v), s);
 }
+
+void blsBlindSignatureSign(blsSignature *orig_sig, blsSignature *sig, const blsSecretKey *sec, int inverse) {
+	Fr s = *cast(&sec->v);
+	if (inverse) {
+		Fr::inv(s, s);
+	}
+	*sig = *orig_sig;
+	// instead of hashing to signature
+	//blsSignatureDeserialize(sig, m, size);
+	GmulCT(*cast(&sig->v), *cast(&sig->v), s);
+}
+
 
 #ifdef BLS_ETH
 /*

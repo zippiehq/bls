@@ -4,9 +4,12 @@
 
 int main()
 {
+	// BLS_DLL_API mclSize blsSignatureSerialize(void *buf, mclSize maxBufSize, const blsSignature *sig);
+
 	blsSecretKey sec;
+	blsSecretKey blinding;
 	blsPublicKey pub;
-	blsSignature sig;
+	blsSignature sig, sig_blinded, sig_unblinded;
 	const char *msg = "abc";
 	const size_t msgSize = strlen(msg);
 	int ret = blsInit(MCL_BLS12_381, MCLBN_COMPILED_TIME_VAR);
@@ -15,7 +18,14 @@ int main()
 		return 1;
 	}
 	blsSecretKeySetByCSPRNG(&sec);
+	blsSecretKeySetByCSPRNG(&blinding);
 	blsGetPublicKey(&pub, &sec);
-	blsSign(&sig, &sec, msg, msgSize);
-	printf("verify %d\n", blsVerify(&sig, &pub, msg, msgSize));
+
+	blsSign(&sig_blinded, &blinding, msg, msgSize);
+	blsBlindSignatureSign(&sig_blinded, &sig, &sec, 0);
+	blsBlindSignatureSign(&sig, &sig_unblinded, &blinding, 1);
+	// BLS_DLL_API int blsVerify(const blsSignature *sig, const blsPublicKey *pub, const void *m, mclSize size);
+	printf("%i\n", blsVerify(&sig_unblinded, &pub, msg, msgSize));
+
+	// BLS_DLL_API void blsBlindSignatureSign(blsSignature *orig_sig, blsSignature *sig, const blsSecretKey *sec, int inverse) {
 }

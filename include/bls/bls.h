@@ -122,6 +122,9 @@ BLS_DLL_API void blsGetPublicKey(blsPublicKey *pub, const blsSecretKey *sec);
 // calculate the has of m and sign the hash
 BLS_DLL_API void blsSign(blsSignature *sig, const blsSecretKey *sec, const void *m, mclSize size);
 
+BLS_DLL_API void blsBlindSignatureSign(blsSignature *orig_sig, blsSignature *sig, const blsSecretKey *sec, int inverse);
+
+
 // return 1 if valid else 0
 // @remark return 0 if pub is zero for BLS_ETH
 BLS_DLL_API int blsVerify(const blsSignature *sig, const blsPublicKey *pub, const void *m, mclSize size);
