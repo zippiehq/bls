@@ -198,7 +198,7 @@ void blsBlindSignatureSign(blsSignature *sig, const blsSecretKey *sec, int inver
 	if (inverse) {
 		Fr::inv(s, s);
 	}
-	blsSignatureDeserialize(sig, buf, size);
+	blsSignatureDeserialize(sig, buf, bufSize);
 	GmulCT(*cast(&sig->v), *cast(&sig->v), s);
 }
 
