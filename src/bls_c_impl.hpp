@@ -193,14 +193,12 @@ void blsSign(blsSignature *sig, const blsSecretKey *sec, const void *m, mclSize 
 	GmulCT(*cast(&sig->v), *cast(&sig->v), s);
 }
 
-void blsBlindSignatureSign(blsSignature *orig_sig, blsSignature *sig, const blsSecretKey *sec, int inverse) {
+void blsBlindSignatureSign(blsSignature *sig, const blsSecretKey *sec, int inverse, const void *buf, mclSize bufSize) {
 	Fr s = *cast(&sec->v);
 	if (inverse) {
 		Fr::inv(s, s);
 	}
-	*sig = *orig_sig;
-	// instead of hashing to signature
-	//blsSignatureDeserialize(sig, m, size);
+	blsSignatureDeserialize(sig, buf, size);
 	GmulCT(*cast(&sig->v), *cast(&sig->v), s);
 }
 
