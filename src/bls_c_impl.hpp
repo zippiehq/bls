@@ -856,6 +856,16 @@ int blsVerifyHash(const blsSignature *sig, const blsPublicKey *pub, const void *
 	return blsVerifyPairing(sig, &Hm, pub);
 }
 
+int blsVerifyBlind(const blsSignature *sig, const blsPublicKey *pub, const void *buf, mclSize bufSize) {
+    blsSignature Hm;
+ 	
+	blsSignatureDeserialize(&Hm, buf, bufSize);
+
+	if (cast(&pub->v)->isZero()) return 0;
+
+	return blsVerifyPairing(sig, &Hm, pub);
+}
+
 void blsSecretKeySub(blsSecretKey *sec, const blsSecretKey *rhs)
 {
 	*cast(&sec->v) -= *cast(&rhs->v);

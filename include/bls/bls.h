@@ -244,6 +244,8 @@ BLS_DLL_API int blsSignHash(blsSignature *sig, const blsSecretKey *sec, const vo
 // return 1 if valid
 BLS_DLL_API int blsVerifyHash(const blsSignature *sig, const blsPublicKey *pub, const void *h, mclSize size);
 
+BLS_DLL_API int blsVerifyBlind(const blsSignature *sig, const blsPublicKey *pub, const void *buf, mclSize size);
+
 /*
 	verify aggSig with pubVec[0, n) and hVec[0, n)
 	e(aggSig, Q) = prod_i e(hVec[i], pubVec[i])
